@@ -1,0 +1,26 @@
+docker:
+  container:
+    name: grout
+  image:
+    repo: ghcr.io/mrc-ide
+    name: grout
+    tag: main
+packit:
+  reside:
+    url: https://packit.dide.ic.ac.uk/reside
+datasets:
+  gadm41:
+    tiles:
+      admin0:
+        packit: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level0.mbtiles
+      admin1:
+        packit: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level0.mbtiles
+      admin2:
+        packit: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level0.mbtiles
+
