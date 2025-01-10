@@ -24,7 +24,13 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "constellation",
+  "docopt",
+  "pytest",
+  "timeago",
+  "requests"
+]
 
 [project.urls]
 Documentation = "https://github.com/Emma/grout-deploy#readme"

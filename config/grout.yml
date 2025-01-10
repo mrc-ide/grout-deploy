@@ -1,9 +1,8 @@
+# currently the only config - we do not (yet) support base configs
 docker:
-  container:
-    name: grout
   image:
     repo: ghcr.io/mrc-ide
-    name: grout
+    name: server
     tag: main
 packit:
   reside:

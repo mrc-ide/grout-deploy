@@ -45,13 +45,13 @@ def load_config(path, config_name=None):
         dat = read_config(path)
         when = timeago.format(dat["time"])
         prev_config_name = dat["config_name"]
-        cfg = DaedalusConfig(path, prev_config_name)
+        cfg = GroutConfig(path, prev_config_name)
         print("[Loaded configuration matching previous deploy '{}' ({})]".format(prev_config_name, when))
     else:
         if config_name is None:
             msg = "Config name must be provided when there is no previous deploy config,"
             raise Exception(msg)
-        cfg = DaedalusConfig(path, config_name)
+        cfg = GroutConfig(path, config_name)
         print("[Loaded configuration for first deploy '{}']".format(config_name)
     return config_name, cfg
 
@@ -66,5 +66,5 @@ def main(argv=None):
     path, config_name, action, args = parse(argv)
     config_name, cfg = load_config(path, config_name, options)
 
-    if action == "start":
-        save_config(path, config_name, cfg)
+    #if action == "start":
+    #    save_config(path, config_name, cfg)
