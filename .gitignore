@@ -1,4 +1,5 @@
 .idea
+config/.last_deploy
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

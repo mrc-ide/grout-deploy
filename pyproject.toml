@@ -3,15 +3,15 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "grout-deploy"
+name = "grout_deploy"
 dynamic = ["version"]
-description = 'Deploy tool for grout'
+description = "Deployment tool for grout"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "Emma", email = "EmmaRussellKilburn@gmail.com" },
+  { name = "Emma Russell", email = "e.russell@imperial.ac.uk" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -33,9 +33,12 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/Emma/grout-deploy#readme"
-Issues = "https://github.com/Emma/grout-deploy/issues"
-Source = "https://github.com/Emma/grout-deploy"
+Documentation = "https://github.com/jameel-institute/grout-deploy#readme"
+Issues = "https://github.com/jameel-institute/grout-deploy/issues"
+Source = "https://github.com/jameel-institute/grout-deploy"
+
+[project.scripts]
+grout = "grout_deploy.cli:main"
 
 [tool.hatch.version]
 path = "src/grout_deploy/__about__.py"
@@ -64,4 +67,11 @@ exclude_lines = [
   "no cov",
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
+]
+
+[tool.ruff.lint]
+ignore = [
+  "T201", # allow print
+  "S301", # allow pickle
+  "TRY002" # allow Exception
 ]

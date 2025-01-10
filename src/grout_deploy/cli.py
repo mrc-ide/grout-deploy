@@ -11,6 +11,7 @@ Options:
 """
 import docopt
 import os
+import pickle
 import time
 import timeago
 
@@ -52,7 +53,7 @@ def load_config(path, config_name=None):
             msg = "Config name must be provided when there is no previous deploy config,"
             raise Exception(msg)
         cfg = GroutConfig(path, config_name)
-        print("[Loaded configuration for first deploy '{}']".format(config_name)
+        print("[Loaded configuration for first deploy '{}']".format(config_name))
     return config_name, cfg
 
 
@@ -64,7 +65,6 @@ def save_config(path, config_name, cfg):
 
 def main(argv=None):
     path, config_name, action, args = parse(argv)
-    config_name, cfg = load_config(path, config_name, options)
-
-    #if action == "start":
-    #    save_config(path, config_name, cfg)
+    config_name, cfg = load_config(path, config_name)
+    if action == "start":
+        save_config(path, config_name, cfg)
