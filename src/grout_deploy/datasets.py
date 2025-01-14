@@ -13,7 +13,7 @@ class GroutDatasets:
     def __download_file(self, dataset, level, full_file_name):
         print(f"Downloading {dataset} {level}")
         packit_server, packet_id, download_name = self.config.get_tile_level_details(dataset, level)
-        self.packit.download_file(packit_server, packet_id, download_name)
+        self.packit.download_file(packit_server, packet_id, download_name, full_file_name)
 
 
     def download(self):

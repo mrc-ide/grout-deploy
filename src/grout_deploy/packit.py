@@ -3,8 +3,8 @@ import requests
 from pyorderly.outpack.location_packit import packit_authorisation
 from grout_deploy.config import GroutConfig
 
-# get token header for packit server - use pyorderly packit_authorization
-# hit download endpoint to get a particular download for a packit, and save to given path
+PACKIT_API_ROUTE = "packit/api/"
+
 class GroutPackit:
     def __init__(self, cfg: GroutConfig):
         self.cfg = cfg
@@ -34,16 +34,19 @@ class GroutPackit:
         print(f"Getting from {url}")
         token_header = self.__get_token_header(packit_server)
         response = requests.get(url, headers=token_header)
-        return response.json()
+        return response
 
     def __get_download_hash(self, packit_server: str, packet_id: str, download_name: str):
         # get packet metadata
-        metadata = self.__get_from_packit(packit_server, f"packit/api/packets/metadata/{packet_id}")
+        metadata = self.__get_from_packit(packit_server, f"{PACKIT_API_ROUTE}packets/metadata/{packet_id}").json()
         matched_files = list(filter((lambda file: file["path"] == download_name), metadata["files"]))
         if len(matched_files) == 0:
             raise Exception(f"{download_name} not found in packet {packet_id}")
         return matched_files[0]["hash"]
 
-    def download_file(self, packit_server: str, packet_id: str, download_name: str):
+    def download_file(self, packit_server: str, packet_id: str, download_name: str, file_path: str):
         hash = self.__get_download_hash(packit_server, packet_id, download_name)
-        print(hash)
+        download_response = self.__get_from_packit(packit_server, f"{PACKIT_API_ROUTE}/packets/file/{packet_id}?hash={hash}&filename={download_name}")
+        with open(file_path, "wb") as fd:
+            for chunk in download_response.iter_content(chunk_size=128):
+                fd.write(chunk)
