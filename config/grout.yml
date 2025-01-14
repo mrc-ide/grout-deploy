@@ -4,22 +4,22 @@ docker:
     repo: ghcr.io/mrc-ide
     name: server
     tag: main
-packit:
+packit_servers:
   reside:
-    url: https://packit.dide.ic.ac.uk/reside
+    url: https://packit.dide.ic.ac.uk/reside/
 datasets:
   gadm41:
     tiles:
       admin0:
-        packit: reside
+        packit_server: reside
         packet_id: 20241214-195124-d22962c9
         download: level0.mbtiles
       admin1:
-        packit: reside
+        packit_server: reside
         packet_id: 20241214-195124-d22962c9
-        download: level0.mbtiles
+        download: level1.mbtiles
       admin2:
-        packit: reside
+        packit_server: reside
         packet_id: 20241214-195124-d22962c9
-        download: level0.mbtiles
+        download: level2.mbtiles
 

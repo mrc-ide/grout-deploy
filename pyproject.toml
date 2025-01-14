@@ -29,7 +29,8 @@ dependencies = [
   "docopt",
   "pytest",
   "timeago",
-  "requests"
+  "requests",
+  "pyorderly"
 ]
 
 [project.urls]
