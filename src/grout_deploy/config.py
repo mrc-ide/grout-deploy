@@ -1,5 +1,6 @@
 from constellation import config
 
+
 class GroutDatasetsConfig:
     def __init__(self, config_dict):
         self.datasets = {}

@@ -9,16 +9,18 @@ Options:
   --delete          Delete all data when pull down containers
   --network         Remove network
 """
-import docopt
 import os
 import pickle
 import time
+
+import docopt
 import timeago
 
 from grout_deploy.config import GroutConfig
 from grout_deploy.datasets import GroutDatasets
 from grout_deploy.docker import GroutDocker
 from grout_deploy.packit import GroutPackit
+
 
 def parse(argv=None):
     config_path = "config"
@@ -50,13 +52,13 @@ def load_config(config_path, config_name=None):
         when = timeago.format(dat["time"])
         prev_config_name = dat["config_name"]
         cfg = GroutConfig(config_path, prev_config_name)
-        print("[Loaded configuration matching previous deploy '{}' ({})]".format(prev_config_name, when))
+        print(f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]")
     else:
         if config_name is None:
             msg = "Config name must be provided when there is no previous deploy config,"
             raise Exception(msg)
         cfg = GroutConfig(config_path, config_name)
-        print("[Loaded configuration for first deploy '{}']".format(config_name))
+        print(f"[Loaded configuration for first deploy '{config_name}']")
     return config_name, cfg
 
 
@@ -74,6 +76,7 @@ def start(data_path, cfg, refresh_all, pull_image):
 
 def stop(data_path, cfg):
     docker = GroutDocker(cfg, data_path)
+    # TODO: delete data - show warning and let user back out
     docker.stop()
 
 def main(argv=None):

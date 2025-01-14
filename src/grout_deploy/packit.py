@@ -1,6 +1,6 @@
 import requests
-
 from pyorderly.outpack.location_packit import packit_authorisation
+
 from grout_deploy.config import GroutConfig
 
 PACKIT_API_ROUTE = "packit/api/"

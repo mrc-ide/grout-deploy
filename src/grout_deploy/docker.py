@@ -1,7 +1,9 @@
-import docker
 import os
 
+import docker
+
 from grout_deploy.config import GroutConfig
+
 
 class GroutDocker:
     def __init__(self, cfg: GroutConfig, bind_path: str):
