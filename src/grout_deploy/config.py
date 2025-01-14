@@ -32,10 +32,13 @@ class GroutConfig:
         dat = config.read_yaml(f"{path}/{config_name}.yml")
 
         # docker
-        docker_image = config.config_dict(dat, ["docker", "image"])
+        docker = config.config_dict(dat, ["docker"])
+        docker_image = config.config_dict(docker, ["image"])
         self.docker_repo = config.config_string(docker_image, ["repo"])
         self.docker_name = config.config_string(docker_image, ["name"])
         self.docker_tag = config.config_string(docker_image, ["tag"])
+        self.docker_container_name = config.config_string(docker, ["container_name"])
+        self.docker_port = config.config_integer(docker, ["port"])
 
         # packit
         packit_config = config.config_dict(dat, ["packit_servers"])

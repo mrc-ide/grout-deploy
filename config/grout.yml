@@ -2,8 +2,10 @@
 docker:
   image:
     repo: ghcr.io/mrc-ide
-    name: server
+    name: grout
     tag: main
+  container_name: grout
+  port: 5000
 packit_servers:
   reside:
     url: https://packit.dide.ic.ac.uk/reside/

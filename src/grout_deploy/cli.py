@@ -17,6 +17,7 @@ import timeago
 
 from grout_deploy.config import GroutConfig
 from grout_deploy.datasets import GroutDatasets
+from grout_deploy.docker import GroutDocker
 from grout_deploy.packit import GroutPackit
 
 def parse(argv=None):
@@ -26,7 +27,7 @@ def parse(argv=None):
     if dat["start"]:
         action = "start"
         config_name = dat["<configname>"]
-        args = {"pull_images": dat["--pull"], "refresh_data": dat["--refresh"]}
+        args = {"pull_image": dat["--pull"], "refresh_data": dat["--refresh"]}
     elif dat["stop"]:
         action = "stop"
         args = {"delete_data": dat["--delete"], "remove_network": dat["--network"]}
@@ -64,10 +65,16 @@ def save_config(config_path, config_name, cfg):
     with open(path_last_deploy(config_path), "wb") as f:
         pickle.dump(dat, f)
 
-def start(data_path, cfg, refresh_all):
+def start(data_path, cfg, refresh_all, pull_image):
     packit = GroutPackit(cfg)
     datasets = GroutDatasets(data_path, cfg.datasets, packit, refresh_all)
     datasets.download()
+    docker = GroutDocker(cfg, data_path)
+    docker.start(pull_image)
+
+def stop(data_path, cfg):
+    docker = GroutDocker(cfg, data_path)
+    docker.stop()
 
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)
@@ -75,4 +82,6 @@ def main(argv=None):
     data_path = "data"
     if action == "start":
         save_config(config_path, config_name, cfg)
-        start(data_path, cfg, args["refresh_data"])
+        start(data_path, cfg, args["refresh_data"], args["pull_image"])
+    elif action == "stop":
+        stop(data_path, cfg)
