@@ -7,9 +7,9 @@ from grout_deploy.config import GroutConfig
 
 class GroutDocker:
     def __init__(self, cfg: GroutConfig, bind_path: str):
-        self.repo = cfg.docker_repo
-        self.image_name = cfg.docker_name
-        self.tag = cfg.docker_tag
+        self.repo = cfg.docker_image_repo
+        self.image_name = cfg.docker_image_name
+        self.tag = cfg.docker_image_tag
         self.port = cfg.docker_port
         self.container_name = cfg.docker_container_name
         self.bind_path = bind_path

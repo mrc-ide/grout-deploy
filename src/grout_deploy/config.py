@@ -19,10 +19,10 @@ class GroutDatasetsConfig:
             self.datasets[dataset] = dataset_levels
 
     def get_dataset_names(self):
-        return self.datasets.keys()
+        return list(self.datasets.keys())
 
     def get_dataset_tile_levels(self, dataset_name: str):
-        return self.datasets[dataset_name].keys()
+        return list(self.datasets[dataset_name].keys())
 
     def get_tile_level_details(self, dataset_name: str, level: str):
         level = self.datasets[dataset_name][level]
@@ -32,20 +32,17 @@ class GroutConfig:
     def __init__(self, path: str, config_name: str):
         dat = config.read_yaml(f"{path}/{config_name}.yml")
 
-        # docker
         docker = config.config_dict(dat, ["docker"])
         docker_image = config.config_dict(docker, ["image"])
-        self.docker_repo = config.config_string(docker_image, ["repo"])
-        self.docker_name = config.config_string(docker_image, ["name"])
-        self.docker_tag = config.config_string(docker_image, ["tag"])
+        self.docker_image_repo = config.config_string(docker_image, ["repo"])
+        self.docker_image_name = config.config_string(docker_image, ["name"])
+        self.docker_image_tag = config.config_string(docker_image, ["tag"])
         self.docker_container_name = config.config_string(docker, ["container_name"])
         self.docker_port = config.config_integer(docker, ["port"])
 
-        # packit
         packit_config = config.config_dict(dat, ["packit_servers"])
         self.packit_servers = {}
         for server, server_config in packit_config.items():
             self.packit_servers[server] = { "url": config.config_string(server_config, ["url"]) }
 
-        # datasets
         self.datasets = GroutDatasetsConfig(config.config_dict(dat, ["datasets"]))
