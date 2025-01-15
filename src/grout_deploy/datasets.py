@@ -26,9 +26,13 @@ class GroutDatasets:
             for level in self.config.get_dataset_tile_levels(dataset_name):
                 full_file_name = os.path.join(folder, f"{level}.mbtiles")
                 # If not refreshing, do not download if file already exists locally
-                if not self.refresh_all and os.path.exists(full_file_name):
+                file_exists = os.path.exists(full_file_name)
+                if not self.refresh_all and file_exists:
                     print(f"{level} exists locally - skipping download")
                     continue
+                if file_exists:
+                    print(f"Deleting previous data at {full_file_name}")
+                    os.remove(full_file_name)
                 self.__download_file(dataset_name, level, full_file_name)
 
 

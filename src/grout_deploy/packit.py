@@ -50,3 +50,4 @@ class GroutPackit:
         with open(file_path, "wb") as fd:
             for chunk in download_response.iter_content(chunk_size=128):
                 fd.write(chunk)
+        print(f"Downloaded data to {file_path}")

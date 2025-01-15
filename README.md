@@ -1,6 +1,11 @@
 # grout-deploy
 Deployment tool for [grout](https://github.com/mrc-ide/grout).
 
+The tool pulls grout data from [packit](https://github.com/mrc-ide/packit) API according to its configuration and 
+runs the grout server in docker. 
+
+A proxy is not included in the tool - the proxy must be configured separately. 
+
 ## Requirements
 
 1. [Python3](https://www.python.org/downloads/) (>= 3.10)
@@ -20,8 +25,12 @@ Clone this repo, then: `hatch shell` before using the deploy tool as below. (You
 
 // TODO
 
-### Testing
+## Dependencies
+
+// TODO - constellation for config but not running docker, pyorderly for packit auth but not pulling files
+
+## Testing
 Run tests with `hatch test`. Generate coverage with `hatch test --cover`.
 
-### Linting
+## Linting
 Run linting with automatic fixes with `hatch fmt`. To check linting only, with no file changes, use `hatch fmt --check`.
