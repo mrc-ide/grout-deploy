@@ -1,15 +1,15 @@
 import os
+import shutil
 
-from grout_deploy.config import GroutDatasetsConfig
+from grout_deploy.config import GroutConfig
 from grout_deploy.packit import GroutPackit
 
 
 class GroutDatasets:
-    def __init__(self, path: str, datasets_config: GroutDatasetsConfig, packit: GroutPackit, refresh_all = False):
+    def __init__(self, config: GroutConfig, path: str):
+        self.config = config.datasets
         self.path = path
-        self.config = datasets_config
-        self.packit = packit
-        self.refresh_all = refresh_all
+        self.packit = GroutPackit(config)
 
     def __download_file(self, dataset, level, full_file_name):
         print(f"Downloading {dataset} {level}")
@@ -17,7 +17,7 @@ class GroutDatasets:
         self.packit.download_file(packit_server, packet_id, download_name, full_file_name)
 
 
-    def download(self):
+    def download(self, refresh_all = False):
         for dataset_name in self.config.get_dataset_names():
             print(f"downloading {dataset_name}")
             folder = os.path.join(self.path, dataset_name)
@@ -27,13 +27,18 @@ class GroutDatasets:
                 full_file_name = os.path.join(folder, f"{level}.mbtiles")
                 # If not refreshing, do not download if file already exists locally
                 file_exists = os.path.exists(full_file_name)
-                if not self.refresh_all and file_exists:
+                if not refresh_all and file_exists:
                     print(f"{level} exists locally - skipping download")
                     continue
                 if file_exists:
                     print(f"Deleting previous data at {full_file_name}")
                     os.remove(full_file_name)
                 self.__download_file(dataset_name, level, full_file_name)
+
+    def delete_all(self):
+        print(f"Deleting datasets folder {self.path}")
+        shutil.rmtree(self.path)
+
 
 
 

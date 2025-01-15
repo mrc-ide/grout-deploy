@@ -1,13 +1,12 @@
 """
 Usage:
   grout start [--pull] [--refresh] [<configname>]
-  grout stop [--delete] [--network]
+  grout stop [--delete]
 
 Options:
   --pull            Pull docker images before starting
   --refresh         Refresh all data even if dataset/level is already downloaded (source location may have changed)
-  --delete          Delete all data when pull down containers
-  --network         Remove network
+  --delete          Delete all data when pull down container
 """
 import os
 import pickle
@@ -32,7 +31,7 @@ def parse(argv=None):
         args = {"pull_image": dat["--pull"], "refresh_data": dat["--refresh"]}
     elif dat["stop"]:
         action = "stop"
-        args = {"delete_data": dat["--delete"], "remove_network": dat["--network"]}
+        args = {"delete_data": dat["--delete"]}
 
     return config_path, config_name, action, args
 
@@ -53,13 +52,14 @@ def load_config(config_path, config_name=None):
         prev_config_name = dat["config_name"]
         cfg = GroutConfig(config_path, prev_config_name)
         print(f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]")
+        return prev_config_name, cfg
     else:
         if config_name is None:
             msg = "Config name must be provided when there is no previous deploy config,"
             raise Exception(msg)
         cfg = GroutConfig(config_path, config_name)
         print(f"[Loaded configuration for first deploy '{config_name}']")
-    return config_name, cfg
+        return config_name, cfg
 
 
 def save_config(config_path, config_name, cfg):
@@ -68,16 +68,22 @@ def save_config(config_path, config_name, cfg):
         pickle.dump(dat, f)
 
 def start(data_path, cfg, refresh_all, pull_image):
-    packit = GroutPackit(cfg)
-    datasets = GroutDatasets(data_path, cfg.datasets, packit, refresh_all)
-    datasets.download()
+    datasets = GroutDatasets(cfg, data_path)
+    datasets.download(refresh_all)
     docker = GroutDocker(cfg, data_path)
     docker.start(pull_image)
 
-def stop(data_path, cfg):
+def stop(data_path, cfg, delete_data):
+    if delete_data:
+        print("WARNING! THIS WILL DELETE ALL LOCAL DATASETS.")
+        if input("Do you want to continue? [yes/no] ") != "yes":
+            print("Not continuing")
+            return
     docker = GroutDocker(cfg, data_path)
-    # TODO: delete data - show warning and let user back out
     docker.stop()
+    if delete_data:
+        datasets = GroutDatasets(cfg, data_path)
+        datasets.delete_all()
 
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)
@@ -85,6 +91,7 @@ def main(argv=None):
     data_path = "data"
     if action == "start":
         save_config(config_path, config_name, cfg)
+        print(f"Saving config with name {config_name}")
         start(data_path, cfg, args["refresh_data"], args["pull_image"])
     elif action == "stop":
-        stop(data_path, cfg)
+        stop(data_path, cfg, args["delete_data"])
