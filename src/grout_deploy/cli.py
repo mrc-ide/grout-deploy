@@ -8,6 +8,7 @@ Options:
   --refresh         Refresh all data even if dataset/level is already downloaded (source location may have changed)
   --delete          Delete all data when pull down container
 """
+
 import os
 import pickle
 import time
@@ -18,7 +19,6 @@ import timeago
 from grout_deploy.config import GroutConfig
 from grout_deploy.datasets import GroutDatasets
 from grout_deploy.docker import GroutDocker
-from grout_deploy.packit import GroutPackit
 
 
 def parse(argv=None):
@@ -53,13 +53,13 @@ def load_config(config_path, config_name=None):
         cfg = GroutConfig(config_path, prev_config_name)
         print(f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]")
         return prev_config_name, cfg
-    else:
-        if config_name is None:
-            msg = "Config name must be provided when there is no previous deploy config,"
-            raise Exception(msg)
-        cfg = GroutConfig(config_path, config_name)
-        print(f"[Loaded configuration for first deploy '{config_name}']")
-        return config_name, cfg
+
+    if config_name is None:
+        msg = "Config name must be provided when there is no previous deploy config,"
+        raise Exception(msg)
+    cfg = GroutConfig(config_path, config_name)
+    print(f"[Loaded configuration for first deploy '{config_name}']")
+    return config_name, cfg
 
 
 def save_config(config_path, config_name, cfg):
@@ -67,11 +67,13 @@ def save_config(config_path, config_name, cfg):
     with open(path_last_deploy(config_path), "wb") as f:
         pickle.dump(dat, f)
 
+
 def start(data_path, cfg, refresh_all, pull_image):
     datasets = GroutDatasets(cfg, data_path)
     datasets.download(refresh_all)
     docker = GroutDocker(cfg, data_path)
     docker.start(pull_image)
+
 
 def stop(data_path, cfg, delete_data):
     if delete_data:
@@ -84,6 +86,7 @@ def stop(data_path, cfg, delete_data):
     if delete_data:
         datasets = GroutDatasets(cfg, data_path)
         datasets.delete_all()
+
 
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)

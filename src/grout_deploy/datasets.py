@@ -16,8 +16,7 @@ class GroutDatasets:
         packit_server, packet_id, download_name = self.config.get_tile_level_details(dataset, level)
         self.packit.download_file(packit_server, packet_id, download_name, full_file_name)
 
-
-    def download(self, refresh_all = False):
+    def download(self, refresh_all):
         for dataset_name in self.config.get_dataset_names():
             print(f"Downloading dataset {dataset_name}")
             folder = os.path.join(self.path, dataset_name)
@@ -38,8 +37,3 @@ class GroutDatasets:
     def delete_all(self):
         print(f"Deleting datasets folder {self.path}")
         shutil.rmtree(self.path)
-
-
-
-
-

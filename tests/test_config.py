@@ -1,5 +1,6 @@
-import pytest
 import re
+
+import pytest
 
 from src.grout_deploy.config import GroutConfig
 

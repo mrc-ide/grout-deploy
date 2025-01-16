@@ -11,11 +11,7 @@ class GroutDatasetsConfig:
                 packit_server = config.config_string(level_config, ["packit_server"])
                 packet_id = config.config_string(level_config, ["packet_id"])
                 download = config.config_string(level_config, ["download"])
-                dataset_levels[level] = {
-                    "packit_server": packit_server,
-                    "packet_id": packet_id,
-                    "download": download
-                }
+                dataset_levels[level] = {"packit_server": packit_server, "packet_id": packet_id, "download": download}
             self.datasets[dataset] = dataset_levels
 
     def get_dataset_names(self):
@@ -27,6 +23,7 @@ class GroutDatasetsConfig:
     def get_tile_level_details(self, dataset_name: str, level: str):
         level = self.datasets[dataset_name][level]
         return level["packit_server"], level["packet_id"], level["download"]
+
 
 class GroutConfig:
     def __init__(self, path: str, config_name: str):
@@ -43,6 +40,6 @@ class GroutConfig:
         packit_config = config.config_dict(dat, ["packit_servers"])
         self.packit_servers = {}
         for server, server_config in packit_config.items():
-            self.packit_servers[server] = { "url": config.config_string(server_config, ["url"]) }
+            self.packit_servers[server] = {"url": config.config_string(server_config, ["url"])}
 
         self.datasets = GroutDatasetsConfig(config.config_dict(dat, ["datasets"]))

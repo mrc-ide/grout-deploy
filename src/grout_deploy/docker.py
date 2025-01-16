@@ -17,21 +17,19 @@ class GroutDocker:
     def __get_client(self):
         return docker.from_env()
 
-    def start(self, pull=True):
+    def start(self, pull):
         client = self.__get_client()
         repo_image = f"{self.repo}/{self.image_name}"
-        if (pull):
+        if pull:
             print(f"Pulling {self.tag} from {repo_image}")
             client.images.pull(repo_image, tag=self.tag)
         host_path = os.path.abspath(self.bind_path)
         client.containers.run(
             f"{repo_image}:{self.tag}",
-            detach = True,
-            name = self.container_name,
-            ports = { 5000:5000 },
-            volumes = {
-                host_path: { "bind": "/data", "mode": "ro" }
-            }
+            detach=True,
+            name=self.container_name,
+            ports={5000: 5000},
+            volumes={host_path: {"bind": "/data", "mode": "ro"}},
         )
         print(f"{self.container_name} is running with data mounted from {host_path}")
 
