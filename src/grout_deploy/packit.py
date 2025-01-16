@@ -1,3 +1,4 @@
+import os
 import requests
 from pyorderly.outpack.location_packit import packit_authorisation
 
@@ -23,7 +24,12 @@ class GroutPackit:
         # save token before returning
         if packit_server not in self.token_headers:
             url = self.__get_server_url(packit_server)
-            token_header = packit_authorisation(url, None)
+
+            # optionally set a personal access token in env var
+            # for running in CI without user interaction
+            pat = os.getenv("GITHUB_ACCESS_TOKEN")
+
+            token_header = packit_authorisation(url, pat)
             self.token_headers[packit_server] = token_header
         return self.token_headers[packit_server]
 
@@ -34,6 +40,8 @@ class GroutPackit:
         print(f"Getting from {url}")
         token_header = self.__get_token_header(packit_server)
         response = requests.get(url, headers=token_header)
+        if not response.status_code == 200:
+            raise Exception(f"Unsuccessful call to {url}\nStatus code: {response.status_code}")
         return response
 
     def __get_download_hash(self, packit_server: str, packet_id: str, download_name: str):
