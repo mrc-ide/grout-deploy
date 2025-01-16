@@ -32,7 +32,7 @@ Clone this repo, then: `hatch shell` before using the deploy tool as below. (You
 ## Testing
 Run tests with `hatch test`. Generate coverage with `hatch test --cover`.
 
-In order to run integration tests without needing to interactively log in to packit, set `GITHUB_ACCESS_TOKEN`
+In order to run integration tests which need to non-interactively log in to packit, set `GITHUB_ACCESS_TOKEN`
 environment variable to a PAT with access to `https://packit.dide.ic.ac.uk/reside/`.
 
 ## Linting
