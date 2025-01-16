@@ -30,5 +30,10 @@ def test_start_and_stop_grout():
     json = response.json()
     assert json["data"]["datasets"]["tile"]["gadm41"]["levels"] == ["admin0", "admin1", "admin2"]
 
+    # check expected tile databases exist
+    assert os.path.exists("data/gadm41/admin0.mbtiles")
+    assert os.path.exists("data/gadm41/admin1.mbtiles")
+    assert os.path.exists("data/gadm41/admin2.mbtiles")
+
     main(["stop"])
     assert not docker_util.container_exists("grout")
