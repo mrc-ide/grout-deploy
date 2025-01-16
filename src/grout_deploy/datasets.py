@@ -19,7 +19,7 @@ class GroutDatasets:
 
     def download(self, refresh_all = False):
         for dataset_name in self.config.get_dataset_names():
-            print(f"downloading {dataset_name}")
+            print(f"Downloading dataset {dataset_name}")
             folder = os.path.join(self.path, dataset_name)
             if not os.path.exists(folder):
                 os.makedirs(folder)
