@@ -34,9 +34,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/jameel-institute/grout-deploy#readme"
-Issues = "https://github.com/jameel-institute/grout-deploy/issues"
-Source = "https://github.com/jameel-institute/grout-deploy"
+Documentation = "https://github.com/mrc-ide/grout-deploy#readme"
+Issues = "https://github.com/mrc-ide/grout-deploy/issues"
+Source = "https://github.com/mrc-ide/grout-deploy"
 
 [project.scripts]
 grout = "grout_deploy.cli:main"

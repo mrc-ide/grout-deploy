@@ -38,7 +38,7 @@ is stored in `config/.last_deploy`.
 
 During deployment, you'll be prompted to authenticate with packit via github. 
 
-After deployment, the server with be available on `http://localhost:5000`.
+After deployment, the server will be available on `http://localhost:5000`.
 
 ## Deployment configuration
 
@@ -49,7 +49,9 @@ The config file has these sections:
 packit server names and associates them with urls.
 - `datasets` - defines a dictionary of datasets by name e.g. "gadm41", and within each dataset, admin levels for which 
 tile databases are available e.g. "admin0". For each level, the packit server name, packit id and download file name
-are configured. 
+are configured. The configured dataset and level keys determine the local file paths, and therefore the grout 
+urls at which the tile data will be available e.g. level "admin0" in dataset "gadm41" will be downloaded to 
+`/data/gadm41/admin0.mbtiles`.
 
 ## Dependencies
 
