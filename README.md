@@ -63,7 +63,7 @@ data - for individual files it's simpler to just access the packit endpoint with
 authentication. 
 
 ## Testing
-Run tests with `hatch test`. Generate coverage with `hatch test --cover`.
+Run tests with `hatch test`.
 
 In order to run integration tests which need to non-interactively authenticate with packit, set `GITHUB_ACCESS_TOKEN`
 environment variable to a PAT with access to `https://packit.dide.ic.ac.uk/reside/`.
