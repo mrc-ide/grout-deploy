@@ -5,7 +5,8 @@ Usage:
 
 Options:
   --pull            Pull docker images before starting
-  --refresh         Refresh all data even if dataset/level is already downloaded (source location may have changed)
+  --refresh         Refresh all data even if dataset/level is already
+                    downloaded (source location may have changed)
   --delete          Delete all data when pull down container
 """
 
@@ -52,12 +53,13 @@ def load_config(config_path, config_name=None):
         prev_config_name = dat["config_name"]
         cfg = GroutConfig(config_path, prev_config_name)
         print(
-            f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]"
+            "[Loaded configuration matching previous deploy "
+            f"'{prev_config_name}' ({when})]"
         )
         return prev_config_name, cfg
 
     if config_name is None:
-        msg = "Config name must be provided when there is no previous deploy config,"
+        msg = "Config name is required when there is no previous deploy config"
         raise Exception(msg)
     cfg = GroutConfig(config_path, config_name)
     print(f"[Loaded configuration for first deploy '{config_name}']")

@@ -45,8 +45,9 @@ class GroutPackit:
         print(f"Getting from {url}")
         token_header = self.__get_token_header(packit_server)
         response = requests.get(url, headers=token_header, timeout=TIMEOUT)
-        if response.status_code != SUCCESS_STATUS:
-            msg = f"Unsuccessful call to {url}\nStatus code: {response.status_code}"
+        status_code = response.status_code
+        if status_code != SUCCESS_STATUS:
+            msg = f"Unsuccessful call to {url}\nStatus code: {status_code}"
             raise Exception(msg)
         return response
 
@@ -84,6 +85,4 @@ class GroutPackit:
         with open(file_path, "wb") as fd:
             for chunk in download_response.iter_content(chunk_size=128):
                 fd.write(chunk)
-        print(
-            f"Downloaded data to {file_path}"
-        )
+        print(f"Downloaded data to {file_path}")

@@ -32,7 +32,8 @@ class GroutDocker:
             volumes={host_path: {"bind": "/data", "mode": "ro"}},
         )
         print(
-            f"{self.container_name} is running with data mounted from {host_path}"
+            f"{self.container_name} is running with data mounted "
+            f"from {host_path}"
         )
 
     def stop(self):

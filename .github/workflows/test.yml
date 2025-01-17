@@ -22,6 +22,6 @@ jobs:
       - name: Test
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.PACKIT_GITHUB_ACCESS_TOKEN }}
-        run: hatch test
+        run: hatch test --cover
       - name: Lint
         run: hatch fmt --check
