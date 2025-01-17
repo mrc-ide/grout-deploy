@@ -70,9 +70,15 @@ exclude_lines = [
   "if TYPE_CHECKING:",
 ]
 
+[tool.ruff]
+line-length = 80
+
 [tool.ruff.lint]
 ignore = [
   "T201", # allow print
   "S301", # allow pickle
   "TRY002" # allow Exception
+]
+extend-select = [
+  "E501" # line length
 ]

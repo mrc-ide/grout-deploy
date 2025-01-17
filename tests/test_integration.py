@@ -34,7 +34,11 @@ def test_start_and_stop_grout():
     response = requests.get(f"{base_url}/metadata")
     assert response.status_code == 200
     json = response.json()
-    assert json["data"]["datasets"]["tile"]["gadm41"]["levels"] == ["admin0", "admin1", "admin2"]
+    assert json["data"]["datasets"]["tile"]["gadm41"]["levels"] == [
+        "admin0",
+        "admin1",
+        "admin2",
+    ]
 
     # check expected tile databases exist
     assert os.path.exists("data/gadm41/admin0.mbtiles")

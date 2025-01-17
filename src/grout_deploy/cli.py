@@ -51,7 +51,9 @@ def load_config(config_path, config_name=None):
         when = timeago.format(dat["time"])
         prev_config_name = dat["config_name"]
         cfg = GroutConfig(config_path, prev_config_name)
-        print(f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]")
+        print(
+            f"[Loaded configuration matching previous deploy '{prev_config_name}' ({when})]"
+        )
         return prev_config_name, cfg
 
     if config_name is None:
