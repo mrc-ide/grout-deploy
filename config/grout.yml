@@ -14,6 +14,20 @@ datasets:
     tiles:
       admin0:
         packit_server: reside
+        packet_id: 20250128-174650-f1147e76
+        download: level0.mbtiles
+      admin1:
+        packit_server: reside
+        packet_id: 20250128-174650-f1147e76
+        download: level1.mbtiles
+      admin2:
+        packit_server: reside
+        packet_id: 20250128-174650-f1147e76
+        download: level2.mbtiles
+  arbomap:
+    tiles:
+      admin0:
+        packit_server: reside
         packet_id: 20241214-195124-d22962c9
         download: level0.mbtiles
       admin1:
