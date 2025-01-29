@@ -1,0 +1,27 @@
+# currently the only config - we do not (yet) support base configs
+docker:
+  image:
+    repo: ghcr.io/mrc-ide
+    name: grout
+    tag: main
+  container_name: grout
+  port: 5000
+packit_servers:
+  reside:
+    url: https://packit.dide.ic.ac.uk/reside/
+datasets:
+  gadm41:
+    tiles:
+      admin0:
+        packit_server: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level0.mbtiles
+      admin1:
+        packit_server: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level1.mbtiles
+      admin2:
+        packit_server: reside
+        packet_id: 20241214-195124-d22962c9
+        download: level2.mbtiles
+
