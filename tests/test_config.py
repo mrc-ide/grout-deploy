@@ -27,11 +27,16 @@ def test_packit(cfg):
 
 
 def test_get_dataset_names(cfg):
-    assert cfg.datasets.get_dataset_names() == ["gadm41"]
+    assert cfg.datasets.get_dataset_names() == ["gadm41", "arbomap"]
 
 
 def test_get_dataset_tile_levels(cfg):
     assert cfg.datasets.get_dataset_tile_levels("gadm41") == [
+        "admin0",
+        "admin1",
+        "admin2",
+    ]
+    assert cfg.datasets.get_dataset_tile_levels("arbomap") == [
         "admin0",
         "admin1",
         "admin2",
