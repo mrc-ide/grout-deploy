@@ -17,18 +17,24 @@ class GroutRegionMetadata:
             self.config.get_region_metadata_level_details(dataset, level)
         )
 
-        full_file_name = os.path.join(folder, f"{level}.mbtiles")
-        file_exists = os.path.exists(full_file_name)
-        if not refresh_all and file_exists:
-            print(f"{level} exists locally - skipping download")
-            continue
-        if file_exists:
-            print(f"Deleting previous data at {full_file_name}")
-            os.remove(full_file_name)
+        packet_artefacts = self.packit.get_artefacts(packit_server, packit_id)
+        artefact_filenames = packet_artefacts[artefact_name]
+        for filename in artefact_filenames:
+            full_file_name = os.path.join(folder, filename)
+            file_exists = os.path.exists(full_file_name)
+            # If not refreshing, do not download if file already exists
+            # TODO: DRY here
+            if not refresh_all and file_exists:
+                print(f"{level} exists locally - skipping download")
+                continue
+            if file_exists:
+                print(f"Deleting previous data at {full_file_name}")
+                os.remove(full_file_name)
 
-        self.packit.download_file(
-            packit_server, packet_id, download_name, full_file_name
-        )
+            self.packit.download_file(
+                packit_server, packet_id, download_name, full_file_name
+            )
+            # TODO: DRY to here
 
     def download(self, refresh_all):
         for dataset_name in self.config.get_dataset_names():
@@ -38,7 +44,6 @@ class GroutRegionMetadata:
                 folder = os.path.join(self.path, dataset_name, level)
                 if not os.path.exists(folder):
                     os.makedirs(folder)
-                # If not refreshing, do not download if file already exists
                 self.__download_files(self, dataset, level, folder, refresh_all)
 
     def delete_all(self):

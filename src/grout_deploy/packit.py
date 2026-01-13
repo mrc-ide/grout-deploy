@@ -68,6 +68,20 @@ class GroutPackit:
             raise Exception(msg)
         return matched_files[0]["hash"]
 
+    def get_artefacts(
+        self,
+        packit_server: str,
+        packit_id: str
+    ):
+        # get artefact metadata for a packet
+        packet_summary_response = self.__get_from_packit(
+            packit_server,
+            f"{PACKIT_API_ROUTE/packets/{packit_id}"
+        )
+        json = packet_summary_response.json()
+        # TODO: map to dictionary of artefact name ("description") to paths
+        return json["custom"]["orderly"]["artefacts"]
+
     def download_file(
         self,
         packit_server: str,
