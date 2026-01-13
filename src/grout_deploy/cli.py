@@ -72,14 +72,16 @@ def save_config(config_path, config_name, cfg):
         pickle.dump(dat, f)
 
 
-def start(data_path, cfg, refresh_all, pull_image):
+def start(data_path, region_metadata_path, cfg, refresh_all, pull_image):
     datasets = GroutDatasets(cfg, data_path)
     datasets.download(refresh_all)
+    region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
+    region_metadata.download(refresh_all)
     docker = GroutDocker(cfg, data_path)
     docker.start(pull_image)
 
 
-def stop(data_path, cfg, delete_data):
+def stop(data_path, region_metadata_path, cfg, delete_data):
     if delete_data:
         print("WARNING! THIS WILL DELETE ALL LOCAL DATASETS.")
         if input("Do you want to continue? [yes/no] ") != "yes":
@@ -90,15 +92,18 @@ def stop(data_path, cfg, delete_data):
     if delete_data:
         datasets = GroutDatasets(cfg, data_path)
         datasets.delete_all()
+        region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
+        region_metadata.delete_all()
 
 
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)
     config_name, cfg = load_config(config_path, config_name)
     data_path = "data"
+    region_metadata_path = "region_metadata"
     if action == "start":
         save_config(config_path, config_name, cfg)
         print(f"Saving config with name {config_name}")
-        start(data_path, cfg, args["refresh_data"], args["pull_image"])
+        start(data_path, region_metadata_path, cfg, args["refresh_data"], args["pull_image"])
     elif action == "stop":
-        stop(data_path, cfg, args["delete_data"])
+        stop(data_path, region_metadata_path, cfg, args["delete_data"])

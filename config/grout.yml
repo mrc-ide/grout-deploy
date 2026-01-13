@@ -29,17 +29,14 @@ datasets:
         packit_server: reside
         packet_id: 20251128-104143-6a764457
         artefact_name: Level 0 region metadata
-        download_file_prefix: region_metadata
       admin1:
         packit_server: reside
         packet_id: 20251128-104143-6a764457
         artefact_name: Level 1 region metadata
-        download_file_prefix: region_metadata
       admin2:
         packit_server: reside
         packet_id: 20251128-104143-6a764457
         artefact_name: Level 1 region metadata
-        download_file_prefix: region_metadata
   arbomap:
     tiles:
       admin0:
