@@ -3,12 +3,12 @@ docker:
   image:
     repo: ghcr.io/mrc-ide
     name: grout
-    tag: main
+    tag: mrc-6821-serve-region-metadata
   container_name: grout
   port: 5000
 packit_servers:
   reside:
-    url: https://packit.dide.ic.ac.uk/reside/
+    url: https://reside.packit.dide.ic.ac.uk/
 datasets:
   gadm41:
     tiles:

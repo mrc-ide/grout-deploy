@@ -5,7 +5,7 @@ from pyorderly.outpack.location_packit import packit_authorisation
 
 from grout_deploy.config import GroutConfig
 
-PACKIT_API_ROUTE = "packit/api/"
+PACKIT_API_ROUTE = "api/"
 SUCCESS_STATUS = 200
 TIMEOUT = 10
 
@@ -56,7 +56,7 @@ class GroutPackit:
     ):
         # get packet metadata
         metadata = self.__get_from_packit(
-            packit_server, f"{PACKIT_API_ROUTE}packets/metadata/{packet_id}"
+            packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}"
         ).json()
         matched_files = list(
             filter(
@@ -76,7 +76,7 @@ class GroutPackit:
         # get artefact metadata for a packet
         packet_summary_response = self.__get_from_packit(
             packit_server,
-            f"{PACKIT_API_ROUTE/packets/{packit_id}"
+            f"{PACKIT_API_ROUTE}packets/{packit_id}"
         )
         json = packet_summary_response.json()
         # TODO: map to dictionary of artefact name ("description") to paths
@@ -94,7 +94,7 @@ class GroutPackit:
         )
         download_response = self.__get_from_packit(
             packit_server,
-            f"{PACKIT_API_ROUTE}/packets/file/{packet_id}?hash={download_hash}&filename={download_name}",
+            f"{PACKIT_API_ROUTE}packets/file/{packet_id}?hash={download_hash}&filename={download_name}",
         )
         with open(file_path, "wb") as fd:
             for chunk in download_response.iter_content(chunk_size=128):

@@ -30,7 +30,7 @@ dependencies = [
   "pytest",
   "timeago",
   "requests",
-  "pyorderly"
+  "pyorderly==0.2.1"
 ]
 
 [project.urls]

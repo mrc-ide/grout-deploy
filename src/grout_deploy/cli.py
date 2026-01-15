@@ -72,8 +72,8 @@ def save_config(config_path, config_name, cfg):
         pickle.dump(dat, f)
 
 
-def start(data_path, region_metadata_path, cfg, refresh_all, pull_image):
-    datasets = GroutDatasets(cfg, data_path)
+def start(tile_data_path, region_metadata_path, cfg, refresh_all, pull_image):
+    datasets = GroutDatasets(cfg, tile_data_path)
     datasets.download(refresh_all)
     region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
     region_metadata.download(refresh_all)
@@ -99,11 +99,11 @@ def stop(data_path, region_metadata_path, cfg, delete_data):
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)
     config_name, cfg = load_config(config_path, config_name)
-    data_path = "data"
-    region_metadata_path = "region_metadata"
+    tile_data_path = "data/tile"
+    region_metadata_path = "data/region_metadata"
     if action == "start":
         save_config(config_path, config_name, cfg)
         print(f"Saving config with name {config_name}")
-        start(data_path, region_metadata_path, cfg, args["refresh_data"], args["pull_image"])
+        start(tile_data_path, region_metadata_path, cfg, args["refresh_data"], args["pull_image"])
     elif action == "stop":
         stop(data_path, region_metadata_path, cfg, args["delete_data"])

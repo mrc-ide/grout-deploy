@@ -1,6 +1,6 @@
 from unittest.mock import Mock, call, patch
 
-from src.grout_deploy.datasets import GroutDatasets
+from src.grout_deploy.region_metadata import GroutRegionMetadata
 
 
 def mock_path_exists_impl(path=""):
