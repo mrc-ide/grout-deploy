@@ -50,15 +50,15 @@ class GroutDatasetsConfig:
         level = self.datasets[dataset_name][level]
         return level["packit_server"], level["packet_id"], level["download"]
 
-    def has_region_metadata(dataset_name: str):
+    def has_region_metadata(self, dataset_name: str):
         return dataset_name in self.region_metadata
 
-    def get_dataset_region_metadata_levels(dataset_name: str):
+    def get_dataset_region_metadata_levels(self, dataset_name: str):
         return list(self.region_metadata[dataset_name].keys())
 
-    def get_region_metadata_level_details(dataset_name: str, level: str):
+    def get_region_metadata_level_details(self, dataset_name: str, level: str):
         level = self.region_metadata[dataset_name][level]
-        return level["packit_server"], level["packit_id"], level["artefact_name"]
+        return level["packit_server"], level["packet_id"], level["artefact_name"]
 
 
 class GroutConfig:

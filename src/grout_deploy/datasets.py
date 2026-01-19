@@ -11,13 +11,13 @@ class GroutDatasets:
         self.path = path
         self.packit = GroutPackit(config)
 
-    def __download_file(self, dataset, level, full_file_name):
+    def __download_file(self, dataset, level, destination_path):
         print(f"Downloading {dataset} {level}")
         packit_server, packet_id, download_name = (
             self.config.get_tile_level_details(dataset, level)
         )
         self.packit.download_file(
-            packit_server, packet_id, download_name, full_file_name
+            packit_server, packet_id, download_name, download_name, destination_path
         )
 
     def download(self, refresh_all):
@@ -27,16 +27,16 @@ class GroutDatasets:
             if not os.path.exists(folder):
                 os.makedirs(folder)
             for level in self.config.get_dataset_tile_levels(dataset_name):
-                full_file_name = os.path.join(folder, f"{level}.mbtiles")
+                destination_path = os.path.join(folder, f"{level}.mbtiles")
                 # If not refreshing, do not download if file already exists
-                file_exists = os.path.exists(full_file_name)
+                file_exists = os.path.exists(destination_path)
                 if not refresh_all and file_exists:
                     print(f"{level} exists locally - skipping download")
                     continue
                 if file_exists:
-                    print(f"Deleting previous data at {full_file_name}")
-                    os.remove(full_file_name)
-                self.__download_file(dataset_name, level, full_file_name)
+                    print(f"Deleting previous data at {destination_path}")
+                    os.remove(destination_path)
+                self.__download_file(dataset_name, level, destination_path)
 
     def delete_all(self):
         print(f"Deleting datasets folder {self.path}")

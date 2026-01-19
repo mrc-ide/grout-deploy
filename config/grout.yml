@@ -3,7 +3,7 @@ docker:
   image:
     repo: ghcr.io/mrc-ide
     name: grout
-    tag: mrc-6821-serve-region-metadata
+    tag: main
   container_name: grout
   port: 5000
 packit_servers:
@@ -36,7 +36,7 @@ datasets:
       admin2:
         packit_server: reside
         packet_id: 20251128-104143-6a764457
-        artefact_name: Level 1 region metadata
+        artefact_name: Level 2 region metadata
   arbomap:
     tiles:
       admin0:

@@ -38,35 +38,47 @@ class GroutPackit:
             self.token_headers[packit_server] = token_header
         return self.token_headers[packit_server]
 
-    def __get_from_packit(self, packit_server: str, relative_url: str):
-        # do an authenticated packit GET request
+    def __packit_url(self, packit_server: str, relative_url: str):
         base = self.__get_server_url(packit_server)
-        url = f"{base}{relative_url}"
-        print(f"Getting from {url}")
-        token_header = self.__get_token_header(packit_server)
-        response = requests.get(url, headers=token_header, timeout=TIMEOUT)
+        return f"{base}{relative_url}"
+
+    def __check_status(self, response: requests.Response, url: str):
         status_code = response.status_code
         if status_code != SUCCESS_STATUS:
             msg = f"Unsuccessful call to {url}\nStatus code: {status_code}"
             raise Exception(msg)
+
+    def __get_from_packit(self, packit_server: str, relative_url: str):
+        # do an authenticated packit GET request
+        url = self.__packit_url(packit_server, relative_url)
+        token_header = self.__get_token_header(packit_server)
+        response = requests.get(url, headers=token_header, timeout=TIMEOUT)
+        self.__check_status(response, url)
         return response
 
-    def __get_download_hash(
-        self, packit_server: str, packet_id: str, download_name: str
-    ):
-        # get packet metadata
-        metadata = self.__get_from_packit(
-            packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}"
-        ).json()
-        matched_files = list(
-            filter(
-                (lambda file: file["path"] == download_name), metadata["files"]
-            )
-        )
-        if len(matched_files) == 0:
-            msg = f"{download_name} not found in packet {packet_id}"
-            raise Exception(msg)
-        return matched_files[0]["hash"]
+    def __get_one_time_token(self, packit_server: str, packet_id: str, path: str):
+        url = self.__packit_url(packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}/files/token")
+        token_header = self.__get_token_header(packit_server)
+        response = requests.post(url, json = {"paths": [path]}, headers=token_header)
+        self.__check_status(response, url)
+        return response.json()["id"]
+
+    #def __get_download_hash(
+    #    self, packit_server: str, packet_id: str, download_name: str
+    #):
+    #    # get packet metadata
+    #    metadata = self.__get_from_packit(
+    #        packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}"
+    #    ).json()
+    #    matched_files = list(
+    #        filter(
+    #            (lambda file: file["path"] == download_name), metadata["files"]
+    #        )
+    #    )
+    #    if len(matched_files) == 0:
+    #        msg = f"{download_name} not found in packet {packet_id}"
+    #        raise Exception(msg)
+    #    return matched_files[0]["hash"]
 
     def get_artefacts(
         self,
@@ -79,24 +91,29 @@ class GroutPackit:
             f"{PACKIT_API_ROUTE}packets/{packit_id}"
         )
         json = packet_summary_response.json()
-        # TODO: map to dictionary of artefact name ("description") to paths
-        return json["custom"]["orderly"]["artefacts"]
+        artefacts = json["custom"]["orderly"]["artefacts"]
+        return {artefact["description"]: artefact["paths"] for artefact in artefacts}
 
     def download_file(
         self,
         packit_server: str,
         packet_id: str,
-        download_name: str,
-        file_path: str,
+        filename: str,
+        path: str,
+        destination_path: str,
     ):
-        download_hash = self.__get_download_hash(
-            packit_server, packet_id, download_name
-        )
+        #download_hash = self.__get_download_hash(
+        #    packit_server, packet_id, download_name
+        #)
+
+        # POST to get one time token
+        ott = self.__get_one_time_token(packit_server, packet_id, path)
+
         download_response = self.__get_from_packit(
             packit_server,
-            f"{PACKIT_API_ROUTE}packets/file/{packet_id}?hash={download_hash}&filename={download_name}",
+            f"{PACKIT_API_ROUTE}packets/{packet_id}/file?path={path}&filename={filename}&token={ott}&inline=false",
         )
-        with open(file_path, "wb") as fd:
+        with open(destination_path, "wb") as fd:
             for chunk in download_response.iter_content(chunk_size=128):
                 fd.write(chunk)
-        print(f"Downloaded data to {file_path}")
+        print(f"Downloaded data to {destination_path}")

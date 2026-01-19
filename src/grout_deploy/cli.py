@@ -20,6 +20,7 @@ import timeago
 from grout_deploy.config import GroutConfig
 from grout_deploy.datasets import GroutDatasets
 from grout_deploy.docker import GroutDocker
+from grout_deploy.region_metadata import GroutRegionMetadata
 
 
 def parse(argv=None):
@@ -72,10 +73,12 @@ def save_config(config_path, config_name, cfg):
         pickle.dump(dat, f)
 
 
-def start(tile_data_path, region_metadata_path, cfg, refresh_all, pull_image):
+def start(data_path, cfg, refresh_all, pull_image):
+    tile_data_path = os.path.join(data_path, "tile")
+    region_metadata_path = os.path.join(data_path, "region_metadata")
     datasets = GroutDatasets(cfg, tile_data_path)
     datasets.download(refresh_all)
-    region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
+    region_metadata = GroutRegionMetadata(cfg, region_metadata_path)
     region_metadata.download(refresh_all)
     docker = GroutDocker(cfg, data_path)
     docker.start(pull_image)
@@ -99,11 +102,10 @@ def stop(data_path, region_metadata_path, cfg, delete_data):
 def main(argv=None):
     config_path, config_name, action, args = parse(argv)
     config_name, cfg = load_config(config_path, config_name)
-    tile_data_path = "data/tile"
-    region_metadata_path = "data/region_metadata"
+    data_path = "data"
     if action == "start":
         save_config(config_path, config_name, cfg)
         print(f"Saving config with name {config_name}")
-        start(tile_data_path, region_metadata_path, cfg, args["refresh_data"], args["pull_image"])
+        start(data_path, cfg, args["refresh_data"], args["pull_image"])
     elif action == "stop":
         stop(data_path, region_metadata_path, cfg, args["delete_data"])
