@@ -24,9 +24,8 @@ class GroutRegionMetadata:
             destination_path = os.path.join(folder, filename)
             file_exists = os.path.exists(destination_path)
             # If not refreshing, do not download if file already exists
-            # TODO: DRY here
             if not refresh_all and file_exists:
-                print(f"{level} exists locally - skipping download")
+                print(f"{filename} exists locally - skipping download")
                 continue
             if file_exists:
                 print(f"Deleting previous data at {destination_path}")
@@ -35,7 +34,6 @@ class GroutRegionMetadata:
             self.packit.download_file(
                 packit_server, packet_id, filename, artefact_path, destination_path
             )
-            # TODO: DRY to here
 
     def download(self, refresh_all):
         for dataset_name in self.config.get_dataset_names():
