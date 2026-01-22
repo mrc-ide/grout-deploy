@@ -30,7 +30,7 @@ class GroutDatasetsConfig:
                         "packet_id": packet_id,
                         "artefact_name": artefact_name
                     }
-            self.region_metadata[dataset] = region_metadata_levels
+                self.region_metadata[dataset] = region_metadata_levels
 
     def __packit_details_from_level_config(self, level_config):
         packit_server = config.config_string(

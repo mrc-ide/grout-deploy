@@ -63,23 +63,6 @@ class GroutPackit:
         self.__check_status(response, url)
         return response.json()["id"]
 
-    #def __get_download_hash(
-    #    self, packit_server: str, packet_id: str, download_name: str
-    #):
-    #    # get packet metadata
-    #    metadata = self.__get_from_packit(
-    #        packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}"
-    #    ).json()
-    #    matched_files = list(
-    #        filter(
-    #            (lambda file: file["path"] == download_name), metadata["files"]
-    #        )
-    #    )
-    #    if len(matched_files) == 0:
-    #        msg = f"{download_name} not found in packet {packet_id}"
-    #        raise Exception(msg)
-    #    return matched_files[0]["hash"]
-
     def get_artefacts(
         self,
         packit_server: str,
@@ -102,10 +85,6 @@ class GroutPackit:
         path: str,
         destination_path: str,
     ):
-        #download_hash = self.__get_download_hash(
-        #    packit_server, packet_id, download_name
-        #)
-
         # POST to get one time token
         ott = self.__get_one_time_token(packit_server, packet_id, path)
 

@@ -72,10 +72,14 @@ def save_config(config_path, config_name, cfg):
     with open(path_last_deploy(config_path), "wb") as f:
         pickle.dump(dat, f)
 
+def get_data_paths(root_path):
+    tile_data_path = os.path.join(root_path, "tile")
+    region_metadata_path = os.path.join(root_path, "region_metadata")
+    return tile_data_path, region_metadata_path
+
 
 def start(data_path, cfg, refresh_all, pull_image):
-    tile_data_path = os.path.join(data_path, "tile")
-    region_metadata_path = os.path.join(data_path, "region_metadata")
+    tile_data_path, region_metadata_path = get_data_paths(data_path)
     datasets = GroutDatasets(cfg, tile_data_path)
     datasets.download(refresh_all)
     region_metadata = GroutRegionMetadata(cfg, region_metadata_path)
@@ -84,7 +88,7 @@ def start(data_path, cfg, refresh_all, pull_image):
     docker.start(pull_image)
 
 
-def stop(data_path, region_metadata_path, cfg, delete_data):
+def stop(data_path, cfg, delete_data):
     if delete_data:
         print("WARNING! THIS WILL DELETE ALL LOCAL DATASETS.")
         if input("Do you want to continue? [yes/no] ") != "yes":
@@ -93,7 +97,8 @@ def stop(data_path, region_metadata_path, cfg, delete_data):
     docker = GroutDocker(cfg, data_path)
     docker.stop()
     if delete_data:
-        datasets = GroutDatasets(cfg, data_path)
+        tile_data_path, region_metadata_path = get_data_paths(data_path)
+        datasets = GroutDatasets(cfg, tile_data_path)
         datasets.delete_all()
         region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
         region_metadata.delete_all()
@@ -108,4 +113,4 @@ def main(argv=None):
         print(f"Saving config with name {config_name}")
         start(data_path, cfg, args["refresh_data"], args["pull_image"])
     elif action == "stop":
-        stop(data_path, region_metadata_path, cfg, args["delete_data"])
+        stop(data_path, cfg, args["delete_data"])
