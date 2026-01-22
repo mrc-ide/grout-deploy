@@ -21,6 +21,10 @@ def wait_for_web_app(poll_interval=0.2, timeout=5):
     msg = f"Web app not available within max timeout of {max}s"
     raise Exception(msg)
 
+def get_response(url):
+    response = requests.get(f"{url}/metadata")
+    assert response.status_code == 200
+    return response.json()
 
 def test_start_and_stop_grout():
     assert (
@@ -31,14 +35,30 @@ def test_start_and_stop_grout():
 
     # check can access metadata endpoint
     wait_for_web_app()
-    response = requests.get(f"{base_url}/metadata")
-    assert response.status_code == 200
-    json = response.json()
+    json = get_response("/metadata")
     assert json["data"]["datasets"]["tile"]["gadm41"]["levels"] == [
         "admin0",
         "admin1",
         "admin2",
     ]
+
+    assert json["data"]["datasets"]["region_metadata"]["gadm41"]["levels"] == [
+            "admin0",
+            "admin1",
+            "admin2",
+        ]
+
+    # check global admin0 region_metadata response
+    json = get_response("/region-metadata/gadm41/admin0")
+    first_country = json["data"][0]
+    assert first_country["id"] == "ABW"
+    assert first_country["name"] == "Aruba"
+
+    # check a country admin1 region_metadata response
+    json = get_response("/region-metadata/gadm41/admin1/FRA")
+    first_region = json["data"][0]
+    assert first_region["id"] == "FRA.1_1"
+    assert first_region["name"] == "Auvergne-Rhône-Alpes"
 
     # check expected tile databases exist
     assert os.path.exists("data/gadm41/admin0.mbtiles")
