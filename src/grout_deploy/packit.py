@@ -30,9 +30,9 @@ class GroutPackit:
         if packit_server not in self.token_headers:
             url = self.__get_server_url(packit_server)
 
-            # optionally set a personal access token in env var
+            # optionally set a packit token in env var
             # for running in CI without user interaction
-            pat = os.getenv("GITHUB_ACCESS_TOKEN")
+            pat = os.getenv("PACKIT_TOKEN")
 
             token_header = packit_authorisation(url, pat)
             self.token_headers[packit_server] = token_header
