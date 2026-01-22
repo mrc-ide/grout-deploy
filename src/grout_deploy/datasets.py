@@ -17,7 +17,11 @@ class GroutDatasets:
             self.config.get_tile_level_details(dataset, level)
         )
         self.packit.download_file(
-            packit_server, packet_id, download_name, download_name, destination_path
+            packit_server,
+            packet_id,
+            download_name,
+            download_name,
+            destination_path,
         )
 
     def download(self, refresh_all):

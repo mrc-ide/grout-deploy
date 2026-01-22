@@ -56,26 +56,27 @@ class GroutPackit:
         self.__check_status(response, url)
         return response
 
-    def __get_one_time_token(self, packit_server: str, packet_id: str, path: str):
-        url = self.__packit_url(packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}/files/token")
+    def __get_one_time_token(
+        self, packit_server: str, packet_id: str, path: str
+    ):
+        url = self.__packit_url(
+            packit_server, f"{PACKIT_API_ROUTE}packets/{packet_id}/files/token"
+        )
         token_header = self.__get_token_header(packit_server)
-        response = requests.post(url, json = {"paths": [path]}, headers=token_header)
+        response = requests.post(
+            url, json={"paths": [path]}, headers=token_header, timeout=TIMEOUT
+        )
         self.__check_status(response, url)
         return response.json()["id"]
 
-    def get_artefacts(
-        self,
-        packit_server: str,
-        packit_id: str
-    ):
+    def get_artefacts(self, packit_server: str, packit_id: str):
         # get artefact metadata for a packet
         packet_summary_response = self.__get_from_packit(
-            packit_server,
-            f"{PACKIT_API_ROUTE}packets/{packit_id}"
+            packit_server, f"{PACKIT_API_ROUTE}packets/{packit_id}"
         )
         json = packet_summary_response.json()
         artefacts = json["custom"]["orderly"]["artefacts"]
-        return {artefact["description"]: artefact["paths"] for artefact in artefacts}
+        return {art["description"]: art["paths"] for art in artefacts}
 
     def download_file(
         self,

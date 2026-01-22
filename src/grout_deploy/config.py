@@ -9,7 +9,9 @@ class GroutDatasetsConfig:
             levels_config = config.config_dict(dataset_config, ["tiles"])
             dataset_levels = {}
             for level, level_config in levels_config.items():
-                packit_server, packet_id =  self.__packit_details_from_level_config(level_config)
+                packit_server, packet_id = (
+                    self.__packit_details_from_level_config(level_config)
+                )
                 download = config.config_string(level_config, ["download"])
                 dataset_levels[level] = {
                     "packit_server": packit_server,
@@ -18,24 +20,28 @@ class GroutDatasetsConfig:
                 }
             self.datasets[dataset] = dataset_levels
 
-            region_metadata_levels_config = config.config_dict(dataset_config, ["region_metadata"], True)
+            region_metadata_levels_config = config.config_dict(
+                dataset_config, ["region_metadata"], True
+            )
             if region_metadata_levels_config is not None:
                 region_metadata_levels = {}
-                for level, level_config in region_metadata_levels_config.items():
-                    packit_server, packet_id =  self.__packit_details_from_level_config(level_config)
-                    artefact_name = config.config_string(level_config, ["artefact_name"])
-                    # Don't need to configure file prefix as that is hardcoded in app
+                level_items = region_metadata_levels_config.items()
+                for level, level_config in level_items:
+                    packit_server, packet_id = (
+                        self.__packit_details_from_level_config(level_config)
+                    )
+                    artefact_name = config.config_string(
+                        level_config, ["artefact_name"]
+                    )
                     region_metadata_levels[level] = {
                         "packit_server": packit_server,
                         "packet_id": packet_id,
-                        "artefact_name": artefact_name
+                        "artefact_name": artefact_name,
                     }
                 self.region_metadata[dataset] = region_metadata_levels
 
     def __packit_details_from_level_config(self, level_config):
-        packit_server = config.config_string(
-            level_config, ["packit_server"]
-        )
+        packit_server = config.config_string(level_config, ["packit_server"])
         packet_id = config.config_string(level_config, ["packet_id"])
         return packit_server, packet_id
 
@@ -57,7 +63,11 @@ class GroutDatasetsConfig:
 
     def get_region_metadata_level_details(self, dataset_name: str, level: str):
         level = self.region_metadata[dataset_name][level]
-        return level["packit_server"], level["packet_id"], level["artefact_name"]
+        return (
+            level["packit_server"],
+            level["packet_id"],
+            level["artefact_name"],
+        )
 
 
 class GroutConfig:

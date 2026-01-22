@@ -72,6 +72,7 @@ def save_config(config_path, config_name, cfg):
     with open(path_last_deploy(config_path), "wb") as f:
         pickle.dump(dat, f)
 
+
 def get_data_paths(root_path):
     tile_data_path = os.path.join(root_path, "tile")
     region_metadata_path = os.path.join(root_path, "region_metadata")
@@ -100,7 +101,7 @@ def stop(data_path, cfg, delete_data):
         tile_data_path, region_metadata_path = get_data_paths(data_path)
         datasets = GroutDatasets(cfg, tile_data_path)
         datasets.delete_all()
-        region_metadata = GroupRegionMetadata(cfg, region_metadata_path)
+        region_metadata = GroutRegionMetadata(cfg, region_metadata_path)
         region_metadata.delete_all()
 
 

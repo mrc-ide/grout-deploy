@@ -10,6 +10,7 @@ from src.grout_deploy.cli import main
 base_url = "http://localhost:5000"
 packit_base_url = "https://reside.packit.dide.ic.ac.uk"
 
+
 def login_to_packit():
     # We need to provide a packit token to pyrorderly so that
     # interactive device login is not initiated during tests.
@@ -18,8 +19,8 @@ def login_to_packit():
     # for grout deploy to pick up and pass to pyorderly
     gh_token = os.getenv("GITHUB_ACCESS_TOKEN")
     assert (
-           gh_token  is not None
-        ), "GITHUB_ACCESS_TOKEN env var must be set to run integration test"
+        gh_token is not None
+    ), "GITHUB_ACCESS_TOKEN env var must be set to run integration test"
     auth_body = {"token": gh_token}
     auth_url = f"{packit_base_url}/api/auth/login/api"
     auth_response = requests.post(auth_url, json=auth_body)
@@ -40,10 +41,12 @@ def wait_for_web_app(poll_interval=0.2, timeout=5):
     msg = f"Web app not available within max timeout of {max}s"
     raise Exception(msg)
 
+
 def get_response(url):
     response = requests.get(f"{base_url}{url}")
     assert response.status_code == 200
     return response.json()
+
 
 def test_start_and_stop_grout():
     login_to_packit()
@@ -61,10 +64,10 @@ def test_start_and_stop_grout():
     ]
 
     assert json["data"]["datasets"]["regionMetadata"]["gadm41"]["levels"] == [
-            "admin0",
-            "admin1",
-            "admin2",
-        ]
+        "admin0",
+        "admin1",
+        "admin2",
+    ]
 
     # check global admin0 region_metadata response
     json = get_response("/region-metadata/gadm41/admin0")
