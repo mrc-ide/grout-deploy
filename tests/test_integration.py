@@ -18,9 +18,9 @@ def login_to_packit():
     # GITHUB_ACCESS_TOKEN then set a PACKIT_TOKEN env var
     # for grout deploy to pick up and pass to pyorderly
     gh_token = os.getenv("GITHUB_ACCESS_TOKEN")
-    assert (
-        gh_token is not None
-    ), "GITHUB_ACCESS_TOKEN env var must be set to run integration test"
+    assert gh_token is not None, (
+        "GITHUB_ACCESS_TOKEN env var must be set to run integration test"
+    )
     auth_body = {"token": gh_token}
     auth_url = f"{packit_base_url}/api/auth/login/api"
     auth_response = requests.post(auth_url, json=auth_body)
