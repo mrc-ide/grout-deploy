@@ -30,7 +30,7 @@ dependencies = [
   "pytest",
   "timeago",
   "requests",
-  "pyorderly"
+  "pyorderly==0.2.1"
 ]
 
 [project.urls]
@@ -75,6 +75,7 @@ line-length = 80
 
 [tool.ruff.lint]
 ignore = [
+  "FURB122", # allow write file chunks in loop
   "T201", # allow print
   "S301", # allow pickle
   "TRY002" # allow Exception

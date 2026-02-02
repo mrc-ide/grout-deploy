@@ -8,7 +8,7 @@ docker:
   port: 5000
 packit_servers:
   reside:
-    url: https://packit.dide.ic.ac.uk/reside/
+    url: https://reside.packit.dide.ic.ac.uk/
 datasets:
   gadm41:
     tiles:
@@ -24,6 +24,19 @@ datasets:
         packit_server: reside
         packet_id: 20250128-174650-f1147e76
         download: level2.mbtiles
+    region_metadata:
+      admin0:
+        packit_server: reside
+        packet_id: 20251128-104143-6a764457
+        artefact_name: Level 0 region metadata
+      admin1:
+        packit_server: reside
+        packet_id: 20251128-104143-6a764457
+        artefact_name: Level 1 region metadata
+      admin2:
+        packit_server: reside
+        packet_id: 20251128-104143-6a764457
+        artefact_name: Level 2 region metadata
   arbomap:
     tiles:
       admin0:

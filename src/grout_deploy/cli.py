@@ -20,6 +20,7 @@ import timeago
 from grout_deploy.config import GroutConfig
 from grout_deploy.datasets import GroutDatasets
 from grout_deploy.docker import GroutDocker
+from grout_deploy.region_metadata import GroutRegionMetadata
 
 
 def parse(argv=None):
@@ -72,9 +73,18 @@ def save_config(config_path, config_name, cfg):
         pickle.dump(dat, f)
 
 
+def get_data_paths(root_path):
+    tile_data_path = os.path.join(root_path, "tile")
+    region_metadata_path = os.path.join(root_path, "region_metadata")
+    return tile_data_path, region_metadata_path
+
+
 def start(data_path, cfg, refresh_all, pull_image):
-    datasets = GroutDatasets(cfg, data_path)
+    tile_data_path, region_metadata_path = get_data_paths(data_path)
+    datasets = GroutDatasets(cfg, tile_data_path)
     datasets.download(refresh_all)
+    region_metadata = GroutRegionMetadata(cfg, region_metadata_path)
+    region_metadata.download(refresh_all)
     docker = GroutDocker(cfg, data_path)
     docker.start(pull_image)
 
@@ -88,8 +98,11 @@ def stop(data_path, cfg, delete_data):
     docker = GroutDocker(cfg, data_path)
     docker.stop()
     if delete_data:
-        datasets = GroutDatasets(cfg, data_path)
+        tile_data_path, region_metadata_path = get_data_paths(data_path)
+        datasets = GroutDatasets(cfg, tile_data_path)
         datasets.delete_all()
+        region_metadata = GroutRegionMetadata(cfg, region_metadata_path)
+        region_metadata.delete_all()
 
 
 def main(argv=None):
